@@ -1,14 +1,24 @@
+/* columns block – base (mobile) */
 .columns > div {
   display: flex;
   flex-direction: column;
+}
+
+.columns > div > div {
+  order: 1;
+  text-align: center;
+  padding: 24px 16px;
 }
 
 .columns img {
   width: 100%;
 }
 
-.columns > div > div {
-  order: 1;
+/* constrain icon images to small size in the icon-grid section */
+.columns-container .columns img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
 }
 
 .columns > div > .columns-img-col {
@@ -19,9 +29,63 @@
   display: block;
 }
 
+/* icon-grid variant – section-level background + centered heading */
+.columns-container {
+  background-color: var(--color-beige, #f1efeb);
+}
+
+.columns-container > .default-content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 16px;
+  text-align: center;
+}
+
+.columns-container > .default-content-wrapper h2 {
+  color: var(--color-navy);
+  font-family: var(--heading-font-family);
+  margin: 0;
+}
+
+/* override button styling – render as navy bold text link */
+.columns-container .columns .button-wrapper {
+  margin: 0;
+}
+
+.columns-container .columns a.button {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: var(--color-navy);
+  font-weight: 700;
+  font-size: var(--body-font-size-s);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: normal;
+}
+
+.columns-container .columns a.button:hover {
+  background: none;
+  border: none;
+  color: var(--color-teal);
+  text-decoration: underline;
+}
+
+/* description text */
+.columns-container .columns > div > div > p:last-child {
+  font-size: var(--body-font-size-xs);
+  color: var(--text-color);
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+
+/* desktop layout – 3 equal columns per row */
 @media (width >= 900px) {
   .columns > div {
-    align-items: center;
+    align-items: flex-start;
     flex-direction: unset;
     gap: 24px;
   }
@@ -29,5 +93,15 @@
   .columns > div > div {
     flex: 1;
     order: unset;
+  }
+
+  .columns-container > .default-content-wrapper {
+    padding: 56px 32px 16px;
+  }
+
+  .columns-container .columns {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px 48px;
   }
 }

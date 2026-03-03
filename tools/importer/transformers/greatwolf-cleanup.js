@@ -3,14 +3,12 @@
 
 /**
  * Transformer for Great Wolf Lodge website cleanup
- * Purpose: Remove non-content elements and fix HTML issues
+ * Purpose: Remove non-content elements and fix DOM issues
  * Applies to: www.greatwolf.com (all templates)
- * Tested: /naples
- * Generated: 2026-02-27
+ * Generated: 2026-03-03
  *
  * SELECTORS EXTRACTED FROM:
- * - Captured DOM during migration workflow (cleaned.html)
- * - Page structure analysis from page migration
+ * - Captured DOM during migration of https://www.greatwolf.com/naples
  */
 
 const TransformHook = {
@@ -21,56 +19,51 @@ const TransformHook = {
 export default function transform(hookName, element, payload) {
   if (hookName === TransformHook.beforeTransform) {
     // Remove cookie consent banner
-    // EXTRACTED: Found <div class="cookie-policy-container"> in captured DOM
+    // Found in captured DOM: <div id="onetrust-consent-sdk">
     WebImporter.DOMUtils.remove(element, [
-      '.cookie-policy-container',
-      '.cookie-policy',
+      '#onetrust-consent-sdk',
+      '#onetrust-banner-sdk',
+      '.otFlat',
     ]);
 
-    // Remove booking engine (interactive widget, not authorable content)
-    // EXTRACTED: Found <div class="booking-engine"> in captured DOM
+    // Remove promo bar
+    // Found in captured DOM: <div class="promo-bar aem-GridColumn">
+    WebImporter.DOMUtils.remove(element, ['.promo-bar']);
+
+    // Remove header/navigation (handled separately by navigation skill)
+    // Found in captured DOM: <div class="header-container">
     WebImporter.DOMUtils.remove(element, [
-      '.booking-engine',
-      '.booking-widget',
+      '.header-container',
+      '.experiencefragment',
     ]);
 
-    // Remove countdown timer (dynamic, not authorable)
-    // EXTRACTED: Found <div class="countdown-clock"> in captured DOM
+    // Remove skip-content link
+    // Found in captured DOM: <a class="skip-content">
+    WebImporter.DOMUtils.remove(element, ['.skip-content']);
+
+    // Remove sign-in/voyagers overlay modals
+    // Found in captured DOM: <div class="sign-in-voyagers-container">
     WebImporter.DOMUtils.remove(element, [
-      '.countdown-clock',
-      '.countdown-timer',
+      '.sign-in-voyagers-container',
+      '.sign-in-container',
     ]);
 
-    // Remove slick carousel cloned slides (duplicates)
-    // EXTRACTED: Found <div class="slick-cloned"> in captured DOM card carousels
-    WebImporter.DOMUtils.remove(element, [
-      '.slick-cloned',
-      '.slick-arrow',
-      'button.slick-prev',
-      'button.slick-next',
-    ]);
+    // Remove slick carousel cloned slides (duplicates content)
+    // Found in captured DOM: <div class="slick-cloned">
+    WebImporter.DOMUtils.remove(element, ['.slick-cloned']);
 
-    // Remove mobile-only show/hide spans that duplicate content
-    // EXTRACTED: Found <span class="show-for-small-only"> in captured DOM
-    WebImporter.DOMUtils.remove(element, [
-      '.show-for-small-only',
-    ]);
+    // Remove scroll buttons from cards-row
+    // Found in captured DOM: <button class="cards-row__scroll">
+    WebImporter.DOMUtils.remove(element, ['.cards-row__scroll']);
 
-    // Remove block separators (decorative, not content)
-    // EXTRACTED: Found <div class="block-separator"> with <hr> in captured DOM
-    WebImporter.DOMUtils.remove(element, [
-      '.block-separator',
-    ]);
-
-    // Re-enable scrolling if body has overflow hidden
-    // EXTRACTED: Captured DOM showed potential overflow:hidden on body
-    if (element.style.overflow === 'hidden') {
+    // Re-enable scrolling if disabled by overlays
+    if (element.style && element.style.overflow === 'hidden') {
       element.setAttribute('style', 'overflow: scroll;');
     }
   }
 
   if (hookName === TransformHook.afterTransform) {
-    // Remove remaining unwanted HTML elements
+    // Remove remaining non-content elements
     WebImporter.DOMUtils.remove(element, [
       'iframe',
       'link',
@@ -78,19 +71,23 @@ export default function transform(hookName, element, payload) {
       'source',
     ]);
 
-    // Clean up tracking attributes
-    // EXTRACTED: Found data-cmp-* attributes throughout captured DOM
+    // Remove tracking and event attributes
     const allElements = element.querySelectorAll('*');
     allElements.forEach((el) => {
-      // Remove AEM component tracking attributes
-      const attrs = Array.from(el.attributes || []);
-      attrs.forEach((attr) => {
-        if (attr.name.startsWith('data-cmp-')
-          || attr.name.startsWith('data-sly-')
-          || attr.name === 'data-asset-id') {
-          el.removeAttribute(attr.name);
-        }
-      });
+      el.removeAttribute('onclick');
+      el.removeAttribute('data-aos');
+      el.removeAttribute('data-aos-easing');
+      el.removeAttribute('data-aos-duration');
+      el.removeAttribute('data-aos-delay');
+      el.removeAttribute('data-slick-index');
     });
+
+    // Remove footer (handled by footer skill)
+    // Found in captured DOM: <footer> and <div class="footer-container">
+    WebImporter.DOMUtils.remove(element, [
+      'footer',
+      '.footer-container',
+      '.footer',
+    ]);
   }
 }

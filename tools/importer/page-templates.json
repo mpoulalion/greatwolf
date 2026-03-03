@@ -1,9 +1,9 @@
 {
   "templates": [
     {
-      "name": "location-page",
+      "name": "location-homepage",
       "urls": ["https://www.greatwolf.com/naples"],
-      "description": "Great Wolf Lodge location landing page with hero, offerings gallery, amenities, featured offerings, deals, FAQ, and loyalty CTA",
+      "description": "Great Wolf Lodge location homepage with hero banner, offerings gallery, amenities grid, featured cards, deals carousel, FAQ accordion, and Voyagers CTA",
       "blocks": [
         {
           "name": "hero",
@@ -11,40 +11,15 @@
         },
         {
           "name": "cards",
-          "instances": [".offerings-gallery__wrapper", ".cards-row", ".card-carousel"]
+          "instances": [".offerings-gallery", ".cards-row", ".card-carousel"]
         },
         {
           "name": "columns",
-          "instances": [".amenities__container"]
+          "instances": [".amenities"]
         },
         {
           "name": "accordion",
-          "instances": [".faq-one-page-new-design"]
-        },
-        {
-          "name": "section-welcome",
-          "instances": [".hero-freeform-banner + .cmp-column-container"],
-          "section": "centered-text"
-        },
-        {
-          "name": "section-featured",
-          "instances": [".cards-row__wrapper"],
-          "section": "dark-background"
-        },
-        {
-          "name": "section-deals",
-          "instances": [".card-carousel__wrapper"],
-          "section": ""
-        },
-        {
-          "name": "section-faq",
-          "instances": [".faq-one-page-new-design"],
-          "section": ""
-        },
-        {
-          "name": "section-voyagers",
-          "instances": [".login-component"],
-          "section": ""
+          "instances": [".faq-one-page"]
         }
       ]
     }

@@ -368,3 +368,95 @@ main .section.teal {
   margin: 0;
   padding: 40px 0;
 }
+
+/* welcome section – navy background with gold sub-heading */
+main .section:has(#best-indoor-water-park) {
+  background-color: var(--color-navy);
+  margin: 0;
+  padding: 48px 0;
+  color: var(--color-white);
+}
+
+main .section:has(#best-indoor-water-park) h1 {
+  color: var(--color-white);
+}
+
+main .section:has(#best-indoor-water-park) h2 {
+  color: var(--color-gold);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+main .section:has(#best-indoor-water-park) p {
+  color: var(--color-white);
+}
+
+main .section:has(#best-indoor-water-park) a:any-link {
+  color: var(--color-light-teal);
+}
+
+/* deals section – navy background */
+main .section:has(#year-round-deals) {
+  background-color: var(--color-navy);
+  margin: 0;
+  padding: 48px 0;
+  color: var(--color-white);
+}
+
+main .section:has(#year-round-deals) h2 {
+  color: var(--color-white);
+}
+
+main .section:has(#year-round-deals) h3 {
+  color: var(--color-gold);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+main .section:has(#year-round-deals) p {
+  color: var(--color-white);
+}
+
+/* voyagers section – green background */
+main .section:has(#voyagers-club) {
+  background-color: var(--color-green);
+  margin: 0;
+  padding: 80px 0;
+  color: var(--color-white);
+  text-align: center;
+}
+
+main .section:has(#voyagers-club) h2 {
+  color: var(--color-light-teal);
+  font-size: var(--heading-font-size-xl);
+}
+
+main .section:has(#voyagers-club) p {
+  color: var(--color-white);
+  font-size: var(--body-font-size-m);
+}
+
+main .section:has(#voyagers-club) a.button:any-link {
+  background-color: transparent;
+  border-color: var(--color-white);
+  color: var(--color-white);
+}
+
+main .section:has(#voyagers-club) a.button:hover {
+  background-color: var(--color-white);
+  border-color: var(--color-white);
+  color: var(--color-green);
+}
+
+/* FAQ section – heading with inline CTA */
+main .section.accordion-container > .default-content-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+main .section.accordion-container > .default-content-wrapper h2 {
+  margin: 0;
+}

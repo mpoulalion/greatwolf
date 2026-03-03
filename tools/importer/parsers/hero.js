@@ -9,76 +9,74 @@
  *
  * Block Structure (from markdown example):
  * - Row 1: Background image
- * - Row 2: Heading, subheading, CTA
+ * - Row 2: Content (heading, subheading, CTA)
  *
  * Source HTML Pattern:
  * <div class="hero-freeform-banner">
- *   <div class="hero-freeform-banner__image-wrapper">
- *     <img class="hero-freeform-banner__image" src="..." />
- *   </div>
- *   <div class="hero-freeform-banner__content">
- *     <span class="h1">SUITES STARTING AT $31/Person</span>
- *     <span class="h7-2024">3/1 Sale</span>
- *     <a class="button" href="...">Apply Offer</a>
+ *   <div class="hero-freeform-banner__wrapper">
+ *     <div class="hero-freeform-banner__background-image">
+ *       <picture>/<video>
+ *     </div>
+ *     <div class="hero-freeform-banner__text-section">
+ *       <h1/h2> heading
+ *       <h3> subheading
+ *       <a> CTA button
+ *     </div>
  *   </div>
  * </div>
  *
- * Generated: 2026-02-27
+ * Generated: 2026-03-03
  */
 export default function parse(element, { document }) {
-  // Extract background image
-  // VALIDATED: Found img.hero-freeform-banner__image in captured DOM line ~571
-  const bgImage = element.querySelector('.hero-freeform-banner__image')
-    || element.querySelector('img[class*="hero"]')
-    || element.querySelector('img');
+  // Extract background image or video poster
+  // Found in captured DOM: <picture class="hero-freeform-banner__video-fallback">
+  // and <video class="video-roll hero-freeform-banner__video-element">
+  const video = element.querySelector('.hero-freeform-banner__video-element');
+  const picture = element.querySelector('.hero-freeform-banner__video-fallback img') ||
+                  element.querySelector('.hero-freeform-banner__background-image img') ||
+                  element.querySelector('picture img');
 
-  // Extract heading
-  // VALIDATED: Found span.h1 containing heading text in captured DOM line ~572
-  const heading = element.querySelector('.h1')
-    || element.querySelector('h1')
-    || element.querySelector('[class*="title"]');
+  // Extract heading text
+  // Found in captured DOM: <h1> or <h2> inside text-section-inner
+  const heading = element.querySelector('.hero-freeform-banner__text-section h1') ||
+                  element.querySelector('.hero-freeform-banner__text-section h2') ||
+                  element.querySelector('h1, h2');
 
   // Extract subheading
-  // VALIDATED: Found span.h7-2024 containing "3/1 Sale" in captured DOM line ~572
-  const subheading = element.querySelector('.h7-2024')
-    || element.querySelector('.h3')
-    || element.querySelector('[class*="subtitle"]');
+  // Found in captured DOM: <h3> inside text-section-inner
+  const subheading = element.querySelector('.hero-freeform-banner__text-section h3') ||
+                     element.querySelector('h3');
 
-  // Extract CTA link
-  // VALIDATED: Found a.button with "Apply Offer" text in captured DOM
-  const cta = element.querySelector('a.button')
-    || element.querySelector('a[class*="cta"]')
-    || element.querySelector('.cta-button a');
+  // Extract CTA button
+  // Found in captured DOM: <a class="button"> inside cta-button wrapper
+  const cta = element.querySelector('.hero-freeform-banner__text-section a.button') ||
+              element.querySelector('.cta-button a') ||
+              element.querySelector('a.button');
 
-  // Build cells matching Hero block structure
+  // Build cells array
   const cells = [];
 
-  // Row 1: Background image (optional)
-  if (bgImage) {
-    cells.push([bgImage]);
+  // Row 1: Background image
+  if (picture) {
+    const img = document.createElement('img');
+    img.src = picture.src || picture.getAttribute('src');
+    img.alt = picture.alt || '';
+    cells.push([img]);
+  } else if (video) {
+    const poster = video.getAttribute('poster');
+    if (poster) {
+      const img = document.createElement('img');
+      img.src = poster;
+      img.alt = 'Hero background';
+      cells.push([img]);
+    }
   }
 
-  // Row 2: Content (heading, subheading, CTA combined)
+  // Row 2: Content (heading + subheading + CTA)
   const contentCell = [];
-  if (heading) {
-    const h1 = document.createElement('h1');
-    h1.textContent = heading.textContent.trim();
-    contentCell.push(h1);
-  }
-  if (subheading) {
-    const h3 = document.createElement('h3');
-    h3.textContent = subheading.textContent.trim();
-    contentCell.push(h3);
-  }
-  if (cta) {
-    const p = document.createElement('p');
-    const link = document.createElement('a');
-    link.href = cta.href;
-    link.textContent = cta.textContent.trim();
-    p.appendChild(link);
-    contentCell.push(p);
-  }
-
+  if (heading) contentCell.push(heading);
+  if (subheading) contentCell.push(subheading);
+  if (cta) contentCell.push(cta);
   if (contentCell.length > 0) {
     cells.push(contentCell);
   }

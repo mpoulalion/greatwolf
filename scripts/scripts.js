@@ -68,6 +68,16 @@ function buildAutoBlocks(main) {
     }
 
     buildHeroBlock(main);
+
+    // Add countdown variant to hero when it contains a sale/offer CTA
+    // In production, use the countdown-YYYYMMDD class on the hero block
+    const hero = main.querySelector('.hero');
+    if (hero && !hero.className.includes('countdown-') && hero.querySelector('a')) {
+      const end = new Date();
+      end.setDate(end.getDate() + 2);
+      const pad = (n) => String(n).padStart(2, '0');
+      hero.classList.add(`countdown-${end.getFullYear()}${pad(end.getMonth() + 1)}${pad(end.getDate())}`);
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);

@@ -1,19 +1,20 @@
+/* =============================================
+   Cards Block – base styling
+   ============================================= */
 .cards > ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 24px;
 }
 
 .cards > ul > li {
-  border: 1px solid #dadada;
+  border-radius: 12px;
+  overflow: hidden;
   background-color: var(--background-color);
-}
-
-.cards .cards-card-body {
-  margin: 16px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
 }
 
 .cards .cards-card-image {
@@ -24,4 +25,207 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+}
+
+.cards .cards-card-body {
+  margin: 0;
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.cards .cards-card-body p {
+  font-size: var(--body-font-size-xs);
+  line-height: 1.5;
+}
+
+.cards .cards-card-body h3 {
+  color: var(--color-navy);
+  font-size: var(--heading-font-size-xs);
+  margin-top: 0;
+}
+
+/* gold accent buttons in cards */
+.cards .cards-card-body a.button.accent {
+  background-color: var(--color-gold);
+  border-color: var(--color-gold);
+  color: var(--color-navy);
+  font-size: var(--body-font-size-xs);
+}
+
+.cards .cards-card-body a.button.accent:hover {
+  background-color: #d9a013;
+  border-color: #d9a013;
+  color: var(--color-navy);
+}
+
+/* =============================================
+   Welcome section – overlay cards
+   ============================================= */
+.section:has(#best-indoor-water-park) .cards > ul {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.section:has(#best-indoor-water-park) .cards > ul > li {
+  display: grid;
+  grid-template: 1fr / 1fr;
+  min-height: 220px;
+  box-shadow: none;
+}
+
+.section:has(#best-indoor-water-park) .cards > ul > li > * {
+  grid-area: 1 / 1;
+}
+
+.section:has(#best-indoor-water-park) .cards > ul > li:first-child {
+  grid-column: 1 / -1;
+  min-height: 280px;
+}
+
+.section:has(#best-indoor-water-park) .cards .cards-card-image {
+  height: 100%;
+}
+
+.section:has(#best-indoor-water-park) .cards .cards-card-image img {
+  height: 100%;
+  aspect-ratio: unset;
+}
+
+.section:has(#best-indoor-water-park) .cards .cards-card-body {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  text-align: left;
+  padding: 20px 24px;
+  background: linear-gradient(to top, rgb(0 0 0 / 65%) 0%, transparent 70%);
+}
+
+.section:has(#best-indoor-water-park) .cards .cards-card-body p {
+  color: var(--color-white);
+  font-size: var(--body-font-size-xs);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0;
+}
+
+.section:has(#best-indoor-water-park) .cards .cards-card-body h3 {
+  color: var(--color-white);
+  font-size: var(--heading-font-size-l);
+  margin: 4px 0 0;
+}
+
+.section:has(#best-indoor-water-park) .cards .cards-card-body .button-wrapper {
+  align-self: flex-end;
+  margin: 8px 0 0;
+}
+
+/* =============================================
+   Deals section – white cards inside dark bg
+   ============================================= */
+/* stylelint-disable-next-line no-descending-specificity */
+.section:has(#year-round-deals) .cards > ul > li {
+  background-color: var(--color-white);
+}
+
+.section:has(#year-round-deals) .cards .cards-card-body {
+  text-align: left;
+}
+
+.section:has(#year-round-deals) .cards .cards-card-body p {
+  color: var(--text-color);
+}
+
+/* =============================================
+   Featured Offerings section – card grid with
+   gold CTA buttons on a light-gray background
+   ============================================= */
+.section:has(#featured-offerings) {
+  background-color: var(--color-light-gray);
+}
+
+.section:has(#featured-offerings) .default-content-wrapper {
+  text-align: center;
+}
+
+.section:has(#featured-offerings) .default-content-wrapper h3 {
+  color: var(--color-navy);
+  font-weight: 700;
+  font-size: var(--heading-font-size-s);
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.section:has(#featured-offerings) .default-content-wrapper h2 {
+  color: var(--color-navy);
+  font-size: 48px;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-top: 4px;
+  margin-bottom: 24px;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.section:has(#featured-offerings) .cards > ul > li {
+  background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+}
+
+.section:has(#featured-offerings) .cards .cards-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.section:has(#featured-offerings) .cards .cards-card-body > p:first-child strong {
+  color: var(--color-navy);
+  font-size: var(--heading-font-size-s);
+}
+
+.section:has(#featured-offerings) .cards .cards-card-body > p:nth-child(2) {
+  color: var(--color-muted);
+  font-size: var(--body-font-size-s);
+}
+
+/* push CTA link to bottom of card */
+.section:has(#featured-offerings) .cards .cards-card-body > p:last-child {
+  margin-top: auto;
+}
+
+/* gold pill CTA – targets plain <a> since pipeline strips button wrappers */
+.section:has(#featured-offerings) .cards .cards-card-body a {
+  display: block;
+  background-color: var(--color-gold);
+  color: var(--color-navy);
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: var(--body-font-size-s);
+  text-decoration: none;
+  text-align: center;
+}
+
+.section:has(#featured-offerings) .cards .cards-card-body a:hover {
+  background-color: #d9a013;
+}
+
+/* desktop layout */
+@media (width >= 900px) {
+  .cards > ul {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  .section:has(#featured-offerings) .default-content-wrapper h2 {
+    font-size: 56px;
+  }
+
+  .section:has(#featured-offerings) .cards > ul {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .section:has(#best-indoor-water-park) .cards > ul > li:first-child {
+    min-height: 340px;
+  }
 }

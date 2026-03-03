@@ -7,97 +7,86 @@
  * Source: https://www.greatwolf.com/naples
  * Base Block: columns
  *
- * Block Structure (from markdown example):
- * - Row per group of 3: [icon+name+desc] | [icon+name+desc] | [icon+name+desc]
- *
  * Source HTML Pattern:
- * <div class="amenities__container">
- *   <div class="amenities__blocks">
- *     <a class="amenities__block" href="...">
- *       <div class="amenities__img"><img src="..." /></div>
- *       <div class="amenities__content">
- *         <p class="amenities__content--name">Water Park</p>
- *         <p class="amenities__content--title">Access to water park...</p>
- *       </div>
- *     </a>
- *     ...
+ * <div class="amenities">
+ *   <div class="amenities__container">
+ *     <div class="amenities__blocks">
+ *       <a class="amenities__block" href="...">
+ *         <div class="amenities__img"><img/></div>
+ *         <div class="amenities__content">
+ *           <p class="amenities__content--name">Name</p>
+ *           <p class="amenities__content--title">Description</p>
+ *         </div>
+ *       </a>
+ *       ... (6 blocks total)
+ *     </div>
  *   </div>
  * </div>
  *
- * Generated: 2026-02-27
+ * Block Structure (from markdown example):
+ * - Row N: [col1 | col2 | col3] each with icon, linked name, description
+ *
+ * Generated: 2026-03-03
  */
 export default function parse(element, { document }) {
-  // Extract all amenity blocks
-  // VALIDATED: Found a.amenities__block in captured DOM lines ~1150-1203
-  const amenityBlocks = Array.from(
-    element.querySelectorAll('.amenities__block')
-      || element.querySelectorAll('[class*="amenity"]'),
-  );
+  // Extract amenity blocks
+  // Found in captured DOM: <a class="amenities__block">
+  const amenityBlocks = Array.from(element.querySelectorAll('.amenities__block, a[class*="amenities__block"]'));
 
+  if (amenityBlocks.length === 0) {
+    return;
+  }
+
+  // Group into rows of 3 columns
   const cells = [];
-  const columnsPerRow = 3;
+  const colsPerRow = 3;
 
-  // Group amenities into rows of 3
-  for (let i = 0; i < amenityBlocks.length; i += columnsPerRow) {
-    const row = [];
-    for (let j = i; j < Math.min(i + columnsPerRow, amenityBlocks.length); j += 1) {
-      const amenity = amenityBlocks[j];
-
-      // Extract icon image
-      // VALIDATED: Found img inside .amenities__img in captured DOM
-      const img = amenity.querySelector('.amenities__img img')
-        || amenity.querySelector('img');
-
-      // Extract name
-      // VALIDATED: Found .amenities__content--name in captured DOM
-      const name = amenity.querySelector('.amenities__content--name')
-        || amenity.querySelector('[class*="name"]');
-
-      // Extract description
-      // VALIDATED: Found .amenities__content--title in captured DOM
-      const desc = amenity.querySelector('.amenities__content--title')
-        || amenity.querySelector('[class*="title"]');
-
-      // Build column cell
+  for (let i = 0; i < amenityBlocks.length; i += colsPerRow) {
+    const rowItems = amenityBlocks.slice(i, i + colsPerRow);
+    const row = rowItems.map((block) => {
       const cell = [];
+
+      // Icon image
+      // Found in captured DOM: <div class="amenities__img"><img>
+      const img = block.querySelector('.amenities__img img, img');
       if (img) {
+        const imgEl = document.createElement('img');
+        imgEl.src = img.src || img.getAttribute('src');
+        imgEl.alt = img.alt || '';
         const p = document.createElement('p');
-        const newImg = document.createElement('img');
-        newImg.src = img.src;
-        newImg.alt = img.alt || '';
-        p.appendChild(newImg);
+        p.append(imgEl);
         cell.push(p);
       }
+
+      // Linked name
+      // Found in captured DOM: <p class="amenities__content--name">
+      const name = block.querySelector('.amenities__content--name');
       if (name) {
         const p = document.createElement('p');
-        if (amenity.href) {
-          const strong = document.createElement('strong');
-          const link = document.createElement('a');
-          link.href = amenity.href;
-          link.textContent = name.textContent.trim();
-          strong.appendChild(link);
-          p.appendChild(strong);
-        } else {
-          const strong = document.createElement('strong');
-          strong.textContent = name.textContent.trim();
-          p.appendChild(strong);
-        }
+        const strong = document.createElement('strong');
+        const a = document.createElement('a');
+        a.href = block.href || '#';
+        a.textContent = name.textContent.trim();
+        strong.append(a);
+        p.append(strong);
         cell.push(p);
       }
+
+      // Description
+      // Found in captured DOM: <p class="amenities__content--title">
+      const desc = block.querySelector('.amenities__content--title');
       if (desc) {
         const p = document.createElement('p');
         p.textContent = desc.textContent.trim();
         cell.push(p);
       }
 
-      row.push(cell);
-    }
+      return cell;
+    });
 
     cells.push(row);
   }
 
-  if (cells.length > 0) {
-    const block = WebImporter.Blocks.createBlock(document, { name: 'Columns', cells });
-    element.replaceWith(block);
-  }
+  const block = WebImporter.Blocks.createBlock(document, { name: 'Columns', cells });
+  element.replaceWith(block);
 }
